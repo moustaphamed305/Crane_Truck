@@ -6,4 +6,4 @@ psycopg2-binary
 redis
 celery
 python-decouple
-dr-spectacular
+drf-spectacular
