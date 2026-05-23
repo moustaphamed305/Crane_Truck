@@ -6,5 +6,6 @@ class MaintenanceRecordViewSet(viewsets.ModelViewSet):
     queryset = MaintenanceRecord.objects.all()
     serializer_class = MaintenanceRecordSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = [\'maintenance_type\', \'description\']
-    ordering_fields = [\'scheduled_date\', \'cost\', \'created_at\']
+    search_fields = ['maintenance_type', 'description']
+    ordering_fields = ['scheduled_date', 'cost', 'created_at']
+

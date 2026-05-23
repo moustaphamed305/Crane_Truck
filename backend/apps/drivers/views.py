@@ -6,5 +6,6 @@ class DriverViewSet(viewsets.ModelViewSet):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = [\'name\', \'phone\', \'license_number\', \'status\']
-    ordering_fields = [\'created_at\', \'name\', \'status\']
+    search_fields = ['name', 'phone', 'license_number', 'status']
+    ordering_fields = ['created_at', 'name', 'status']
+

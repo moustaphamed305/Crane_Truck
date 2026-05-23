@@ -3,8 +3,9 @@ from rest_framework.routers import DefaultRouter
 from .views import TruckViewSet
 
 router = DefaultRouter()
-router.register(r\'trucks\', TruckViewSet)
+router.register(r'trucks', TruckViewSet)
 
 urlpatterns = [
-    path(\'\', include(router.urls)),
+    path('', include(router.urls)),
 ]
+

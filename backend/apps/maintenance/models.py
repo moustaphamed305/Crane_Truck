@@ -2,14 +2,14 @@ from django.db import models
 
 class MaintenanceRecord(models.Model):
     TYPE_CHOICES = [
-        (\'routine\', \'Routine Check\'),
-        (\'repair\', \'Repair\'),
-        (\'inspection\', \'Inspection\'),
-        (\'oil_change\', \'Oil Change\'),
-        (\'tire_replacement\', \'Tire Replacement\'),
+        ('routine', 'Routine Check'),
+        ('repair', 'Repair'),
+        ('inspection', 'Inspection'),
+        ('oil_change', 'Oil Change'),
+        ('tire_replacement', 'Tire Replacement'),
     ]
     
-    truck = models.ForeignKey(\'trucks.Truck\', on_delete=models.CASCADE, related_name=\'maintenance_records\')
+    truck = models.ForeignKey('trucks.Truck', on_delete=models.CASCADE, related_name='maintenance_records')
     maintenance_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     description = models.TextField(blank=True)
     
@@ -23,3 +23,4 @@ class MaintenanceRecord(models.Model):
 
     def __str__(self):
         return f"{self.truck.plate_number} - {self.maintenance_type} ({self.scheduled_date})"
+

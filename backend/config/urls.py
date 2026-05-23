@@ -13,3 +13,4 @@ urlpatterns = [
     path("api/", include("apps.maintenance.urls")),
     path("api/", include("apps.notifications.urls")),
 ]
+
