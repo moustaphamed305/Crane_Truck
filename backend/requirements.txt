@@ -1,0 +1,9 @@
+Django
+djangorestframework
+django-channels
+djangorestframework-simplejwt
+psycopg2-binary
+redis
+celery
+python-decouple
+dr-spectacular
