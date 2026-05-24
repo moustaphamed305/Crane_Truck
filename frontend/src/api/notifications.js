@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = 'https://crane-truck-1.onrender.com/api';
 
 export const notificationsAPI = {
   getNotifications: (params = {}) => {
@@ -15,3 +15,4 @@ export const notificationsAPI = {
     return axios.patch(`${API_BASE_URL}/notifications/${id}/`, { is_read: true });
   },
 };
+

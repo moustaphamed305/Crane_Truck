@@ -14,3 +14,4 @@ export const authAPI = {
     return axios.get(`${API_BASE_URL}/auth/me/`);
   },
 };
+
