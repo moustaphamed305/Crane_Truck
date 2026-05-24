@@ -1,26 +1,8 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'https://crane-truck-1.onrender.com/api';
-
+import axiosInstance from '../services/axiosInstance';
 export const trucksAPI = {
-  getTrucks: (params = {}) => {
-    return axios.get(`${API_BASE_URL}/trucks/`, { params });
-  },
-  
-  getTruck: (id) => {
-    return axios.get(`${API_BASE_URL}/trucks/${id}/`);
-  },
-  
-  createTruck: (data) => {
-    return axios.post(`${API_BASE_URL}/trucks/`, data);
-  },
-  
-  updateTruck: (id, data) => {
-    return axios.patch(`${API_BASE_URL}/trucks/${id}/`, data);
-  },
-  
-  deleteTruck: (id) => {
-    return axios.delete(`${API_BASE_URL}/trucks/${id}/`);
-  },
+  getTrucks: (params = {}) => axiosInstance.get('/trucks/', { params }),
+  getTruck: (id) => axiosInstance.get(`/trucks/${id}/`),
+  createTruck: (data) => axiosInstance.post('/trucks/', data),
+  updateTruck: (id, data) => axiosInstance.patch(`/trucks/${id}/`, data),
+  deleteTruck: (id) => axiosInstance.delete(`/trucks/${id}/`),
 };
-
