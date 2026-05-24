@@ -8,3 +8,5 @@ celery
 python-decouple
 drf-spectacular
 dj-database-url
+django-cors-headers
+django-cors-headers
