@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { MainLayout } from '../layouts/MainLayout';
 import { tripsAPI } from '../api/trips';
+import { trucksAPI } from '../api/trucks';
+import { driversAPI } from '../api/drivers';
 
 const Trips = () => {
   const [trips, setTrips] = useState([]);
+  const [trucks, setTrucks] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ origin: '', destination: '', status: 'planned', truck: '', driver: '' });
+  const [form, setForm] = useState({ start_location: '', destination: '', status: 'planned', truck: '', driver: '' });
 
-  useEffect(() => { fetchTrips(); }, []);
+  useEffect(() => { fetchAll(); }, []);
 
-  const fetchTrips = async () => {
+  const fetchAll = async () => {
     try {
-      const response = await tripsAPI.getTrips();
-      setTrips(response.data.results || []);
-    } catch (err) { setError('Failed to fetch trips'); }
+      const [tripsRes, trucksRes, driversRes] = await Promise.all([
+        tripsAPI.getTrips(),
+        trucksAPI.getTrucks(),
+        driversAPI.getDrivers(),
+      ]);
+      setTrips(tripsRes.data.results || []);
+      setTrucks(trucksRes.data.results || []);
+      setDrivers(driversRes.data.results || []);
+    } catch (err) { setError('Failed to fetch data'); }
     finally { setLoading(false); }
   };
 
@@ -24,8 +34,8 @@ const Trips = () => {
     try {
       await tripsAPI.createTrip(form);
       setShowForm(false);
-      setForm({ origin: '', destination: '', status: 'planned', truck: '', driver: '' });
-      fetchTrips();
+      setForm({ start_location: '', destination: '', status: 'planned', truck: '', driver: '' });
+      fetchAll();
     } catch (err) { setError('Failed to add trip'); }
   };
 
@@ -33,7 +43,8 @@ const Trips = () => {
     <MainLayout>
       <div className="mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Trips Management</h1>
-        <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <button onClick={() => setShowForm(!showForm)} className="bg-bl
+ue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           {showForm ? 'Cancel' : 'Add Trip'}
         </button>
       </div>
@@ -42,19 +53,25 @@ const Trips = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Origin</label>
-              <input type="text" value={form.origin} onChange={e => setForm({...form, origin: e.target.value})} className="w-full border rounded px-3 py-2" required />
+              <input type="text" value={form.start_location} onChange={e => setForm({...form, start_location: e.target.value})} className="w-full border rounded px-3 py-2" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
               <input type="text" value={form.destination} onChange={e => setForm({...form, destination: e.target.value})} className="w-full border rounded px-3 py-2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Truck ID</label>
-              <input type="text" value={form.truck} onChange={e => setForm({...form, truck: e.target.value})} className="w-full border rounded px-3 py-2" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Truck</label>
+              <select value={form.truck} onChange={e => setForm({...form, truck: e.target.value})} className="w-full border rounded px-3 py-2" required>
+                <option value="">-- Select Truck --</option>
+                {trucks.map(t => <option key={t.id} value={t.id}>{t.plate_number || t.name || t.id}</option>)}
+              </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Driver ID</label>
-              <input type="text" value={form.driver} onChange={e => setForm({...form, driver: e.target.value})} className="w-full border rounded px-3 py-2" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Driver</label>
+              <select value={form.driver} onChange={e => setForm({...form, driver: e.target.value})} className="w-full border rounded px-3 py-2" required>
+                <option value="">-- Select Driver --</option>
+                {drivers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -62,6 +79,7 @@ const Trips = () => {
                 <option value="planned">Planned</option>
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
               </select>
             </div>
           </div>
@@ -84,7 +102,7 @@ const Trips = () => {
                 <tr><td colSpan="3" className="px-6 py-8 text-center text-gray-500">No trips found. Add one!</td></tr>
               ) : trips.map((t) => (
                 <tr key={t.id} className="border-t hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-900">{t.origin}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{t.start_location}</td>
                   <td className="px-6 py-4 text-sm text-gray-900">{t.destination}</td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
