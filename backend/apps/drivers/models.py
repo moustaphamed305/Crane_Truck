@@ -8,7 +8,7 @@ class Driver(models.Model):
         ('on_leave', 'On Leave'),
     ]
     
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='driver_profile')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='driver_profiles')
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
     license_number = models.CharField(max_length=50, unique=True)
